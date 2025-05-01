@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from 'src/entities/product';
+import { Product } from 'src/products/entities/product';
 
 @Injectable()
 export class ProductService {
-  private products: Product[] = []
-  private lastIdx: number = 0
+  private products: Product[] = [{
+    id: 1,
+    name: 'Macbook Pro M4',
+    price: 50000,
+    stock: 13
+  }]
+  private lastIdx: number = 1
 
   private create(product: Product): Product {
     product.id = ++this.lastIdx

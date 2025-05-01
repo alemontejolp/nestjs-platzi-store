@@ -1,14 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, NotFoundException, ParseIntPipe } from '@nestjs/common';
-import { ProductService } from 'src/services/product/product.service';
-import { CreateProductRequestMessage } from 'src/dtos/create_product_request_message';
-import { Product } from 'src/entities/product';
-import { UpdateProductRequestMessage } from 'src/dtos/update_product_request_message';
+import { ProductService } from 'src/products/services/product/product.service';
+import { CreateProductRequestMessage } from 'src/products/dtos/create_product_request_message';
+import { Product } from 'src/products/entities/product';
+import { UpdateProductRequestMessage } from 'src/products/dtos/update_product_request_message';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+// @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private productService: ProductService) {}
 
   @Get()
+  @ApiOperation({summary: 'Retrieve all products based on the given filters'})
   getList(
     @Query('limit') limit: number = 100,
     @Query('offset') offset: number = 0,
