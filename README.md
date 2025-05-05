@@ -21,6 +21,40 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Notas de los cursos
+1. https://platzi.com/cursos/nestjs/
+2. https://platzi.com/cursos/nestjs-modular/
+3. Peristencia con TypeORM: https://platzi.com/cursos/nestjs-typeorm/
+
+Lista de cursos: https://platzi.com/buscar/?search=nestjs
+
+Pendiente autenticación: https://platzi.com/cursos/nestjs-auth/
+
+``` sh
+# .env
+# Docker
+HOST_USER=alexis
+DOCKER_HOST_PORT=3000
+
+# App
+API_KEY=1234567890
+
+# DB
+DATABASE_NAME=app_db
+DATABASE_HOST=pg-instance
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASSWD=qwerty
+```
+
+``` sh
+# .env.pg
+POSTGRES_PASSWORD=qwerty
+TZ=America/Cancun
+PGTZ=America/Cancun
+
+```
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

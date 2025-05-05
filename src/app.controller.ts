@@ -15,4 +15,9 @@ export class AppController {
   newEndpoint(): string {
     return 'New endpoint'
   }
+
+  @Get('demo')
+  getDemoData() {
+    return this.appService.getDemoData()
+  }
 }

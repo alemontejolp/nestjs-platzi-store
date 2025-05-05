@@ -1,46 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from 'src/products/entities/product';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, FindManyOptions, Between } from 'typeorm';
 
 @Injectable()
 export class ProductService {
-  private products: Product[] = [{
-    id: 1,
-    name: 'Macbook Pro M4',
-    price: 50000,
-    stock: 13
-  }]
-  private lastIdx: number = 1
 
-  private create(product: Product): Product {
-    product.id = ++this.lastIdx
-    this.products.push(product)
-    return product
+  constructor(@InjectRepository(Product) private productRepository: Repository<Product>) {}
+
+  async findOne(id: number, fullStruct: boolean = true): Promise<Product|null> {
+    let relations = fullStruct ? ['brand', 'categories'] : []
+    return await this.productRepository.findOne({where: { id: id }, relations: relations})
   }
 
-  findOne(id: number): Product|undefined {
-    return this.products.find(v => v.id == id)
-  }
-
-  findAll(): Product[] {
-    return this.products
-  }
-
-  save(product: Product): Product {
-    if (!product.id) {
-      return this.create(product)
+  async findAll(
+    page?: number,
+    limit?: number,
+    minPrice?: number,
+    maxPrice?: number,
+  ): Promise<Product[]> {
+    let options: FindManyOptions<Product> = {}
+    options.where = {}
+    options.relations = ['brand', 'categories']
+    if (page != undefined && limit != undefined) {
+      options.take = limit
+      options.skip = limit * page
     }
-    let idx = this.products.findIndex(v => v.id == product.id)
-    if (idx == -1) {
-      return this.create(product)
+    if (minPrice != undefined && maxPrice != undefined) {
+      options.where.price = Between(minPrice, maxPrice)
     }
-    this.products[idx] = product
-    return product
+    return await this.productRepository.find(options)
   }
 
-  remove(id: number): Product|undefined {
-    let idx = this.products.findIndex(v => v.id == id)
-    if (idx == -1) return
-    let [product] = this.products.splice(idx, 1)
-    return product
+  async update(product: Product): Promise<Product|null> {
+    let foundProduct = await this.productRepository.findOne({where: {id: product.id}})
+    if (!foundProduct) {
+      return null
+    }
+    let mergedProduct = this.productRepository.merge(foundProduct, product)
+    return await this.productRepository.save(mergedProduct)
+  }
+
+  async save(product: Product): Promise<Product> {
+    let savedProduct = await this.productRepository.save(product)
+    return savedProduct
+  }
+
+  async remove(id: number): Promise<boolean> {
+    let result = await this.productRepository.delete(id)
+    return !!result.affected
   }
 }

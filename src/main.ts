@@ -8,7 +8,10 @@ async function bootstrap() {
   // Input data validation in endpoints
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidNonWhitelisted: true
+    forbidNonWhitelisted: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    },
   }))
   // Swagger config
   const config = new DocumentBuilder()

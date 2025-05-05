@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - HOST_USER=${HOST_USER}
+    ports:
+      - "${DOCKER_HOST_PORT}:3000"
+    env_file:
+      - .env
+    volumes:
+      - .:/home/app
+  pg-instance:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432" # host:container
+    env_file:
+      - .env.pg
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+volumes:
+  pg-data:
