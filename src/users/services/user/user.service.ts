@@ -27,6 +27,12 @@ export class UserService {
     return await this.userRepository.findOne({ where: { id: id }, relations: ['customer'] })
   }
 
+  async findByEmail(email: string) {
+    return await this.userRepository.findOne({
+      where: { email: email }
+    })
+  }
+
   async update(user: User) {
     let foundUser = await this.userRepository.findOne({where: {id: user.id}})
     if (!foundUser) {

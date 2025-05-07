@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { environments } from './environments';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 
 @Module({
@@ -19,14 +20,16 @@ import config from './config';
       isGlobal: true,
       load: [config],
       validationSchema: Joi.object({
-        API_KEY: Joi.number().required(),
+        API_KEY: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_PORT: Joi.number().required(),
+        JWT_SECRET: Joi.string().required()
       })
     }),
     UsersModule,
     ProductsModule,
-    DatabaseModule
+    DatabaseModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [
@@ -39,7 +42,7 @@ import config from './config';
         return data.data
       },
       inject: [HttpService]
-    }
+    },
   ],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserRequestMessage } from 'src/users/dtos/create-user-request-message';
 import { User } from 'src/users/entities/user';
 import { UpdateUserRequestMessage } from 'src/users/dtos/update-user-request-message';
+import * as bcrypt from 'bcrypt'
 
 // @ApiTags('users')
 @Controller('users')
@@ -28,7 +29,7 @@ export class UsersController {
     let user = new User()
     user.name = payload.name
     user.email = payload.email
-    user.passwd = payload.passwd
+    user.passwd = await bcrypt.hash(payload.passwd, 11)
     user.role = payload.role
     return await this.userService.save(user)
   }
